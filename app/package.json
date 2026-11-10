@@ -1,0 +1,56 @@
+{
+  "name": "clinic-waiting-room",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Clinic Waiting Room: live waiting times, QR check-in and a professional's queue (phase 1 MVP).",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "concurrently -k -n server,worker,web \"npm:dev:server\" \"npm:dev:worker\" \"npm:dev:web\"",
+    "dev:server": "tsx watch server/index.ts",
+    "dev:worker": "tsx watch server/worker/index.ts",
+    "dev:web": "vite",
+    "build": "vite build && tsc -p tsconfig.server.json",
+    "start": "node dist/server/server/index.js",
+    "start:worker": "node dist/server/server/worker/index.js",
+    "migrate": "tsx server/db/migrate.ts",
+    "seed": "tsx server/seed.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "lint": "node scripts/check-clock.mjs",
+    "test": "vitest run",
+    "test:unit": "vitest run test/unit",
+    "test:integration": "vitest run test/integration",
+    "test:e2e": "playwright test --trace off",
+    "coverage": "node scripts/criteria-coverage.mjs"
+  },
+  "dependencies": {
+    "@fastify/cookie": "11.0.2",
+    "@fastify/static": "8.2.0",
+    "csv-parse": "5.6.0",
+    "fastify": "5.4.0",
+    "libphonenumber-js": "1.12.9",
+    "pdfkit": "0.17.1",
+    "pg": "8.16.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-router-dom": "6.30.1"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "6.6.3",
+    "@testing-library/react": "16.3.0",
+    "@types/node": "22.15.30",
+    "@types/pdfkit": "0.13.9",
+    "@types/pg": "8.15.4",
+    "@types/react": "18.3.23",
+    "@types/react-dom": "18.3.7",
+    "@vitejs/plugin-react": "4.5.2",
+    "concurrently": "9.1.2",
+    "jsdom": "26.1.0",
+    "tsx": "4.20.3",
+    "typescript": "5.8.3",
+    "vite": "6.3.5",
+    "vitest": "3.2.3"
+  }
+}
