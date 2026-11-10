@@ -32,8 +32,9 @@ export const DEVICE_COOKIE = 'wr_device';
 export function rateLimit(max: number, windowMs: number) {
   const hits = new Map<string, number[]>();
   return async (req: FastifyRequest, reply: FastifyReply) => {
+    if (process.env.RATE_LIMIT === 'off') return; // test runs only
     const key = `${req.ip}:${req.routeOptions.url}`;
-    const now = Date.now();
+    const now = Date.now(); // clock-ok: wall time for rate limiting, not business time
     const list = (hits.get(key) ?? []).filter((t) => now - t < windowMs);
     list.push(now);
     hits.set(key, list);
@@ -50,10 +51,11 @@ export function requireStaff(deps: Deps, roles?: Staff['role'][]) {
   };
 }
 
-export async function buildApp(deps: Deps, opts: { logger?: boolean } = {}) {
+export async function buildApp(deps: Deps, opts: { logger?: boolean; logStream?: NodeJS.WritableStream } = {}) {
   const app = Fastify({
     logger: opts.logger
       ? {
+          ...(opts.logStream ? { stream: opts.logStream } : {}),
           // Logs carry route patterns, never raw paths: a visit token must never reach a log (ADR-004).
           serializers: {
             req: (req) => ({ method: req.method, route: (req as any).routeOptions?.url ?? 'unknown' }),

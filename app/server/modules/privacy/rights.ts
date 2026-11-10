@@ -96,6 +96,8 @@ export async function requestExportCode(c: PoolClient, phoneInput: string) {
   if (!visits.length) throw new RightsError('No data is held for this number');
   const now = clock.now();
   const code = fourDigitCode();
+  // Only the newest code works: earlier unused codes for this number stop working.
+  await c.query("UPDATE text_code SET used_at = $2 WHERE phone_hash = $1 AND purpose = 'export' AND used_at IS NULL", [hash(phone), now]);
   await c.query(
     "INSERT INTO text_code (phone_hash, code_hash, purpose, expires_at, created_at) VALUES ($1, $2, 'export', $3, $4)",
     [hash(phone), hash(`${phone}:${code}`), new Date(now.getTime() + 10 * 60000), now],

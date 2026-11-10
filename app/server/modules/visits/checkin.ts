@@ -105,6 +105,8 @@ export async function requestCheckinCode(c: PoolClient, phoneInput: string): Pro
   );
   if (recent.rows[0].n >= 3) return { result: 'too_many' };
   const code = fourDigitCode();
+  // Only the newest code works: earlier unused codes for this number stop working.
+  await c.query("UPDATE text_code SET used_at = $2 WHERE phone_hash = $1 AND purpose = 'checkin' AND used_at IS NULL", [hash(phone), now]);
   await c.query(
     "INSERT INTO text_code (phone_hash, code_hash, purpose, expires_at, created_at) VALUES ($1, $2, 'checkin', $3, $4)",
     [hash(phone), hash(`${phone}:${code}`), new Date(now.getTime() + CODE_MINUTES * 60000), now],

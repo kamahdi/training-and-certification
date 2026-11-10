@@ -116,7 +116,7 @@ export class Hub {
       'X-Accel-Buffering': 'no',
     });
     res.write('retry: 3000\n\n');
-    const s: Stream = { ...stream, res, openedAt: Date.now() };
+    const s: Stream = { ...stream, res, openedAt: Date.now() }; // clock-ok: stream age
     this.registry.add(s, owner);
     res.on('close', () => this.registry.remove(s));
     void lastEventId; // logged only: snapshots are complete, nothing is replayed
