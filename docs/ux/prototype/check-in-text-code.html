@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QR check-in with a text code</title>
+<link rel="stylesheet" href="ds/tokens.css">
+<link rel="stylesheet" href="ds/components/bundle.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#006B44}a:hover{color:#008A5C}
+</style>
+</head>
+<body>
+<main style="width: 390px; height: 844px; box-sizing: border-box; background: var(--surface-page); font-family: var(--font-text); color: var(--text-body); display: flex; flex-direction: column; padding: 20px 24px 32px; gap: 24px; overflow: hidden">
+  <header style="display: flex; align-items: center; height: 44px">
+    <span style="font-family: var(--font-display); font-weight: 700; font-size: 17px; color: var(--text-strong); letter-spacing: -0.01em">[Clinic name]</span>
+  </header>
+
+  <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px">
+    <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted)">Check-in</span>
+    <h1 style="margin: 0; font-family: var(--font-display); font-size: 32px; line-height: 1.15; font-weight: 700; letter-spacing: -0.02em; color: var(--text-strong)">Check in with your phone number</h1>
+    <p style="margin: 0; font-size: 15px; line-height: 1.55; color: var(--text-body)">Use the number you gave when you booked.</p>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <label for="phone" style="font-size: 14px; font-weight: 600; color: var(--text-strong)">Phone number</label>
+    <input id="phone" type="tel" value="+32 470 12 34 56" style="height: 48px; box-sizing: border-box; border: 1px solid var(--border-strong); border-radius: 8px; padding: 0 14px; font-family: var(--font-mono); font-size: 16px; color: var(--text-strong); background: var(--surface-card)">
+  </div>
+
+  <section aria-label="Text code" style="display: flex; flex-direction: column; gap: 12px; background: var(--surface-subtle); border-radius: 14px; padding: 20px">
+    <span style="font-size: 15px; line-height: 1.5; color: var(--text-strong)">We sent a 4-digit code to the number ending in 56.</span>
+    <label for="code" style="font-size: 14px; font-weight: 600; color: var(--text-strong)">Code</label>
+    <input id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="4" value="48" style="height: 56px; box-sizing: border-box; border: 1px solid var(--border-focus); box-shadow: var(--ring-focus); border-radius: 8px; padding: 0 16px; font-family: var(--font-mono); font-size: 26px; letter-spacing: 0.5em; color: var(--text-strong); background: var(--surface-card)">
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <span style="font-size: 13px; color: var(--text-muted)">The code works for 10 minutes.</span>
+      <button type="button" style="min-height: 44px; border: 0; background: transparent; padding: 0; font-family: var(--font-text); font-size: 14px; font-weight: 600; color: var(--text-accent-deep); cursor: pointer">Send again</button>
+    </div>
+  </section>
+
+  <button type="button" style="height: 56px; border: 0; border-radius: 8px; background: var(--surface-accent-deep); color: var(--text-on-accent); font-family: var(--font-text); font-size: 17px; font-weight: 600; cursor: pointer">Check in</button>
+
+  <p style="margin: 0; margin-top: auto; font-size: 14px; line-height: 1.55; color: var(--text-muted)">No phone with you, or no text arrived? Reception can check you in.</p>
+</main>
+</body>
+</html>

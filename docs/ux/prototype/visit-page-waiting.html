@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visit page, waiting</title>
+<link rel="stylesheet" href="ds/tokens.css">
+<link rel="stylesheet" href="ds/components/bundle.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#006B44}a:hover{color:#008A5C}
+</style>
+</head>
+<body>
+<main style="width: 390px; height: 844px; box-sizing: border-box; background: var(--surface-subtle); font-family: var(--font-text); color: var(--text-body); display: flex; flex-direction: column; padding: 20px 20px 24px; gap: 16px; overflow: hidden">
+  <header style="display: flex; align-items: center; justify-content: space-between; height: 44px">
+    <span style="font-family: var(--font-display); font-weight: 700; font-size: 17px; color: var(--text-strong); letter-spacing: -0.01em">[Clinic name]</span>
+    <nav aria-label="Language" style="display: flex; gap: 4px; background: var(--n-0); border: 1px solid var(--border-hairline); border-radius: 999px; padding: 3px">
+      <a href="#" style="min-width: 36px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 999px; font-size: 13px; font-weight: 500; color: var(--text-muted); border-bottom: 0">FR</a>
+      <a href="#" style="min-width: 36px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 999px; font-size: 13px; font-weight: 500; color: var(--text-muted); border-bottom: 0">NL</a>
+      <a href="#" aria-current="true" style="min-width: 36px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--n-0); background: var(--ethix-rich-black); border-bottom: 0">EN</a>
+    </nav>
+  </header>
+
+  <div style="display: flex; flex-direction: column; gap: 4px; padding-top: 4px">
+    <h1 style="margin: 0; font-family: var(--font-display); font-size: 32px; font-weight: 700; letter-spacing: -0.02em; color: var(--text-strong)">Hi Sara</h1>
+    <p style="margin: 0; font-size: 15px; color: var(--text-muted)">Today at 10:15 with Dr. Peeters</p>
+  </div>
+
+  <section aria-label="Estimated call time" style="background: var(--surface-card); border: 1px solid var(--border-hairline); border-radius: 20px; box-shadow: var(--shadow-xs); padding: 24px; display: flex; flex-direction: column; gap: 12px">
+    <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted)">Estimated call time</span>
+    <div style="display: flex; flex-direction: column; gap: 2px">
+      <span style="font-size: 17px; color: var(--text-body)">Around</span>
+      <span style="font-family: var(--font-display); font-size: 52px; line-height: 1.04; font-weight: 700; letter-spacing: -0.03em; color: var(--text-strong)">10:40–10:55</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-muted)">
+      <span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 999px; background: var(--ethix-emerald)"></span>
+      <span>Live · updated at 10:32</span>
+    </div>
+  </section>
+
+  <section aria-label="Why your time changed" style="background: var(--status-warning-surface); border-radius: 14px; padding: 16px; display: flex; gap: 12px; align-items: flex-start">
+    <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A5A10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <span style="font-size: 15px; font-weight: 600; color: var(--text-strong)">Your time moved 10 minutes later</span>
+      <span style="font-size: 14px; line-height: 1.5; color: var(--text-body)">A patient coming from emergency has been prioritised. Thank you for your patience.</span>
+    </div>
+  </section>
+
+  <section aria-label="Your visit" style="background: var(--surface-card); border: 1px solid var(--border-hairline); border-radius: 14px; padding: 4px 16px">
+    <div style="display: flex; align-items: center; gap: 12px; min-height: 56px; border-bottom: 1px solid var(--border-hairline)">
+      <span aria-hidden="true" style="width: 28px; height: 28px; border-radius: 999px; background: var(--surface-card-tint); display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#006B44" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span>
+      <span style="flex-grow: 1; font-size: 15px; color: var(--text-strong)">Checked in at 10:02</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px; min-height: 56px">
+      <span aria-hidden="true" style="width: 28px; height: 28px; border-radius: 999px; background: var(--surface-card-tint); display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#006B44" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span>
+      <span style="flex-grow: 1; font-size: 15px; color: var(--text-strong)">Pre-visit form done</span>
+      <a href="pre-visit-form.html" style="font-size: 14px; font-weight: 600; color: var(--text-accent-deep); border-bottom: 0; min-height: 44px; display: flex; align-items: center">Edit</a>
+    </div>
+  </section>
+
+  <p style="margin: 0; margin-top: auto; font-size: 14px; line-height: 1.55; color: var(--text-muted)">Dr. Peeters will call you by name in the waiting room. Keep this page open to follow your time.</p>
+</main>
+</body>
+</html>

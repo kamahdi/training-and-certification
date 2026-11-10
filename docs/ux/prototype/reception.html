@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reception</title>
+<link rel="stylesheet" href="ds/tokens.css">
+<link rel="stylesheet" href="ds/components/bundle.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#006B44}a:hover{color:#008A5C}
+</style>
+</head>
+<body>
+<div style="min-height: 980px; background: var(--surface-subtle); font-family: var(--font-text); color: var(--text-body)">
+  <header style="background: var(--surface-page); border-bottom: 1px solid var(--border-hairline)">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 32px; min-height: 64px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px">
+      <span style="font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--text-strong); letter-spacing: -0.01em">[Clinic name]</span>
+      <span style="font-size: 15px; color: var(--text-muted)">Reception · Tuesday 12 November</span>
+      <div style="flex-grow: 1"></div>
+      <span style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text-accent-deep)"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 999px; background: var(--ethix-emerald)"></span>Live</span>
+      <button type="button" style="height: 36px; padding: 0 14px; border: 1px solid var(--border-strong); border-radius: 8px; background: var(--surface-page); font-family: var(--font-text); font-size: 14px; font-weight: 500; color: var(--text-strong); cursor: pointer">Sign out</button>
+    </div>
+  </header>
+
+  <main style="max-width: 1200px; margin: 0 auto; padding: 32px; display: flex; flex-direction: column; gap: 20px">
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+      <h1 style="margin: 0; flex-grow: 1; font-family: var(--font-display); font-size: 32px; font-weight: 700; letter-spacing: -0.02em; color: var(--text-strong)">Today's appointments</h1>
+      <button type="button" style="height: 44px; padding: 0 18px; border: 1px solid var(--border-strong); border-radius: 8px; background: var(--surface-page); font-family: var(--font-text); font-size: 15px; font-weight: 500; color: var(--text-strong); cursor: pointer">Import appointments file</button>
+      <button type="button" style="height: 44px; padding: 0 18px; border: 0; border-radius: 8px; background: var(--surface-accent-deep); font-family: var(--font-text); font-size: 15px; font-weight: 600; color: var(--text-on-accent); cursor: pointer">Add walk-in</button>
+    </div>
+
+    <section aria-label="Texts not delivered" style="background: var(--status-warning-surface); border-radius: 14px; padding: 16px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7A4F0E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+      <span style="flex: 999 1 420px; font-size: 15px; color: var(--text-strong)"><strong>1 text not delivered:</strong> Marc D.'s confirmation. The number +32 471 •• •• 12 is not valid.</span>
+      <button type="button" style="height: 40px; padding: 0 16px; border: 1px solid #C9A266; border-radius: 8px; background: var(--surface-page); font-family: var(--font-text); font-size: 14px; font-weight: 500; color: var(--text-strong); cursor: pointer">Fix number</button>
+    </section>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end">
+      <div style="flex: 999 1 360px; display: flex; flex-direction: column; gap: 6px">
+        <label for="search" style="font-size: 14px; font-weight: 600; color: var(--text-strong)">Find a patient</label>
+        <input id="search" type="search" placeholder="Name or phone number" style="height: 44px; box-sizing: border-box; border: 1px solid var(--border-strong); border-radius: 8px; padding: 0 14px; font-family: var(--font-text); font-size: 15px; color: var(--text-strong); background: var(--surface-card)">
+      </div>
+      <nav aria-label="Professional" style="flex: 1 1 auto; display: flex; gap: 4px; background: var(--surface-page); border: 1px solid var(--border-hairline); border-radius: 8px; padding: 3px">
+        <a href="#" aria-current="true" style="height: 36px; padding: 0 14px; display: flex; align-items: center; border-radius: 6px; font-size: 14px; font-weight: 600; color: var(--n-0); background: var(--ethix-rich-black); border-bottom: 0">All</a>
+        <a href="#" style="height: 36px; padding: 0 14px; display: flex; align-items: center; border-radius: 6px; font-size: 14px; font-weight: 500; color: var(--text-body); border-bottom: 0">Dr. Peeters</a>
+        <a href="#" style="height: 36px; padding: 0 14px; display: flex; align-items: center; border-radius: 6px; font-size: 14px; font-weight: 500; color: var(--text-body); border-bottom: 0">Dr. Janssens</a>
+      </nav>
+    </div>
+
+    <section aria-label="Appointments" style="background: var(--surface-card); border: 1px solid var(--border-hairline); border-radius: 14px; box-shadow: var(--shadow-xs); overflow-x: auto">
+      <table style="width: 100%; min-width: 960px; border-collapse: collapse; font-size: 14px">
+        <thead>
+          <tr style="text-align: left; color: var(--text-muted)">
+            <th scope="col" style="padding: 14px 24px 10px; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; border-bottom: 1px solid var(--border-hairline)">Time</th>
+            <th scope="col" style="padding: 14px 12px 10px; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; border-bottom: 1px solid var(--border-hairline)">Patient</th>
+            <th scope="col" style="padding: 14px 12px 10px; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; border-bottom: 1px solid var(--border-hairline)">Professional</th>
+            <th scope="col" style="padding: 14px 12px 10px; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; border-bottom: 1px solid var(--border-hairline)">Status</th>
+            <th scope="col" style="padding: 14px 12px 10px; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; border-bottom: 1px solid var(--border-hairline)">Checked in</th>
+            <th scope="col" style="padding: 14px 24px 10px 12px; border-bottom: 1px solid var(--border-hairline)"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Actions</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 12px 24px; font-family: var(--font-mono); color: var(--text-strong); border-bottom: 1px solid var(--border-hairline)">9:45</td>
+            <td style="padding: 12px; font-weight: 600; color: var(--text-strong); border-bottom: 1px solid var(--border-hairline)">Ben K.</td>
+            <td style="padding: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-hairline)">Dr. Peeters</td>
+            <td style="padding: 12px; border-bottom: 1px solid var(--border-hairline)"><span style="display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 999px; background: var(--surface-card-tint); font-size: 13px; font-weight: 600; color: var(--text-accent-deep)">Waiting</span></td>
+            <td style="padding: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-hairline)">9:50 · text code</td>
+            <td style="padding: 8px 24px 8px 12px; text-align: right; border-bottom: 1px solid var(--border-hairline)"><button type="button" style="height: 36px; padding: 0 14px; border: 1px solid var(--border-strong); border-radius: 8px; background: var(--surface-page); font-family: var(--font-text); font-size: 14px; font-weight: 500; color: var(--text-strong); cursor: pointer">Flag emergency</button></td>
+          </tr>
+          <tr>
+            <td style="padding: 12px 24px; font-family: var(--font-mono); color: var(--text-strong); border-bottom: 1px solid var(--border-hairline)">10:00</td>
+            <td style="padding: 12px; font-weight: 600; color: var(--text-strong); border-bottom: 1px solid var(--border-hairline)">Ana V.</td>
+            <td style="padding: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-hairline)">Dr. Peeters</td>
+            <td style="padding: 12px; border-bottom: 1px solid var(--border-hairline)"><span style="display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 999px; background: var(--surface-card-tint); font-size: 13px; font-weight: 600; color: var(--text-accent-deep)">Waiting</span></td>
+            <td style="padding: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-hairline)">9:30 · QR code</td>
+            <td style="padding: 8px 24px 8px 12px; text-align: right; border-bottom: 1px solid var(--border-hairline)"><button type="button" style="height: 36px; padding: 0 14px; border: 1px solid var(--border-strong); border-radius: 8px; background: var(--surface-page); font-family: var(--font-text); font-size: 14px; font-weight: 500; color: var(--text-strong); cursor: pointer">Flag emergency</button></td>
+          </tr>
+          <tr>
+            <td style="padding: 12px 24px; font-family: var(--font-mono); color: var(--text-strong); border-bottom: 1px solid var(--border-hairline)">10:00</td>
+            <td style="padding: 12px; font-weight: 600; color: var(--text-strong); border-bottom: 1px solid var(--border-hairline)">Marc D.</td>
+            <td style="padding: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-hairline)">Dr. Janssens</td>
+            <td style="padding: 12px; border-bottom: 1px solid var(--border-hairline)"><span style="display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 999px; background: var(--n-100); font-size: 13px; font-weight: 600; color: var(--text-body)">Booked</span></td>
+            <td style="padding: 12px; color: var(--text-muted); border-bottom: 1px solid var(--border-hairline)">Not yet</td>
+            <td style="padding: 8px 24px 8px 12px; text-align: right; border-bottom: 1px solid var(--border-hairline)"><button type="button" style="height: 36px; padding: 0 14px; border: 0; border-radius: 8px; background: var(--surface-accent-deep); font-family: var(--font-text); font-size: 14px; font-weight: 600; color: var(--text-on-accent); cursor: pointer">Arrived</button></td>
+          </tr>
+          <tr>
+            <td style="padding: 12px 24px; font-family: var(--font-mono); color: var(--text-strong); border-bottom: 1px solid var(--border-hairline)">10:15</td>
+            <td style="padding: 12px; font-weight: 600; color: var(--text-strong); border-bottom: 1px solid var(--border-hairline)">Dan M. <span style="margin-left: 8px; display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; background: var(--status-critical-surface); font-size: 12px; font-weight: 600; color: #8E2D21">Emergency</span></td>
+            <td style="padding: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-hairline)">Dr. Peeters</td>
+            <td style="padding: 12px; border-bottom: 1px solid var(--border-hairline)"><span style="display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 999px; background: var(--surface-card-tint); font-size: 13px; font-weight: 600; color: var(--text-accent-deep)">Waiting</span></td>
+            <td style="padding: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-hairline)">10:05 · reception</td>
+            <td style="padding: 8px 24px 8px 12px; text-align: right; border-bottom: 1px solid var(--border-hairline)"><button type="button" style="height: 36px; padding: 0 14px; border: 1px solid var(--border-strong); border-radius: 8px; background: var(--surface-page); font-family: var(--font-text); font-size: 14px; font-weight: 500; color: var(--text-strong); cursor: pointer">Clear flag</button></td>
+          </tr>
+          <tr>
+            <td style="padding: 12px 24px; font-family: var(--font-mono); color: var(--text-strong); border-bottom: 1px solid var(--border-hairline)">10:15</td>
+            <td style="padding: 12px; font-weight: 600; color: var(--text-strong); border-bottom: 1px solid var(--border-hairline)">Sara B.</td>
+            <td style="padding: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-hairline)">Dr. Peeters</td>
+            <td style="padding: 12px; border-bottom: 1px solid var(--border-hairline)"><span style="display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 999px; background: var(--surface-card-tint); font-size: 13px; font-weight: 600; color: var(--text-accent-deep)">Waiting</span></td>
+            <td style="padding: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-hairline)">10:02 · QR code</td>
+            <td style="padding: 8px 24px 8px 12px; text-align: right; border-bottom: 1px solid var(--border-hairline)"><button type="button" style="height: 36px; padding: 0 14px; border: 1px solid var(--border-strong); border-radius: 8px; background: var(--surface-page); font-family: var(--font-text); font-size: 14px; font-weight: 500; color: var(--text-strong); cursor: pointer">Flag emergency</button></td>
+          </tr>
+          <tr>
+            <td style="padding: 12px 24px; color: var(--text-muted); border-bottom: 1px solid var(--border-hairline)">Walk-in</td>
+            <td style="padding: 12px; font-weight: 600; color: var(--text-strong); border-bottom: 1px solid var(--border-hairline)">Lucas D.</td>
+            <td style="padding: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-hairline)">Dr. Peeters</td>
+            <td style="padding: 12px; border-bottom: 1px solid var(--border-hairline)"><span style="display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 999px; background: var(--surface-card-tint); font-size: 13px; font-weight: 600; color: var(--text-accent-deep)">Waiting</span></td>
+            <td style="padding: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-hairline)">10:04 · reception</td>
+            <td style="padding: 8px 24px 8px 12px; text-align: right; border-bottom: 1px solid var(--border-hairline)"><button type="button" style="height: 36px; padding: 0 14px; border: 1px solid var(--border-strong); border-radius: 8px; background: var(--surface-page); font-family: var(--font-text); font-size: 14px; font-weight: 500; color: var(--text-strong); cursor: pointer">Flag emergency</button></td>
+          </tr>
+          <tr>
+            <td style="padding: 12px 24px; font-family: var(--font-mono); color: var(--text-strong); border-bottom: 1px solid var(--border-hairline)">9:30</td>
+            <td style="padding: 12px; font-weight: 600; color: var(--text-strong); border-bottom: 1px solid var(--border-hairline)">Nina R.</td>
+            <td style="padding: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-hairline)">Dr. Janssens</td>
+            <td style="padding: 12px; border-bottom: 1px solid var(--border-hairline)"><span style="display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 999px; background: var(--status-warning-surface); font-size: 13px; font-weight: 600; color: #7A4F0E">Missed</span></td>
+            <td style="padding: 12px; color: var(--text-body); border-bottom: 1px solid var(--border-hairline)">9:21 · QR code</td>
+            <td style="padding: 8px 24px 8px 12px; text-align: right; border-bottom: 1px solid var(--border-hairline)"><button type="button" style="height: 36px; padding: 0 14px; border: 1px solid var(--border-strong); border-radius: 8px; background: var(--surface-page); font-family: var(--font-text); font-size: 14px; font-weight: 500; color: var(--text-strong); cursor: pointer">Return to queue</button></td>
+          </tr>
+          <tr>
+            <td style="padding: 12px 24px; font-family: var(--font-mono); color: var(--text-strong)">10:30</td>
+            <td style="padding: 12px; font-weight: 600; color: var(--text-strong)">Eva L.</td>
+            <td style="padding: 12px; color: var(--text-body)">Dr. Janssens</td>
+            <td style="padding: 12px"><span style="display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 999px; background: var(--n-100); font-size: 13px; font-weight: 600; color: var(--text-body)">Booked</span></td>
+            <td style="padding: 12px; color: var(--text-muted)">Not yet · delay text sent</td>
+            <td style="padding: 8px 24px 8px 12px; text-align: right"><button type="button" style="height: 36px; padding: 0 14px; border: 0; border-radius: 8px; background: var(--surface-accent-deep); font-family: var(--font-text); font-size: 14px; font-weight: 600; color: var(--text-on-accent); cursor: pointer">Arrived</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
+</body>
+</html>
