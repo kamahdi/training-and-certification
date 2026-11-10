@@ -85,6 +85,13 @@ export async function buildApp(deps: Deps, opts: { logger?: boolean; logStream?:
 
   app.get('/api/health', async () => ({ ok: true }));
 
+  // Development only: the fake text provider's outbox, so demos and browser tests can read texts and codes.
+  app.get('/api/dev/outbox', async (_req, reply) => {
+    if (process.env.NODE_ENV === 'production' || process.env.SMS_PROVIDER && process.env.SMS_PROVIDER !== 'fake') return reply.code(404).send({ error: 'not_found' });
+    const { sentByFake } = await import('./modules/messaging/provider.js');
+    return { messages: sentByFake.slice(-50) };
+  });
+
   // Serve the built React app in production, with client-side routing.
   const here = dirname(fileURLToPath(import.meta.url));
   const webDir = [join(here, '../../web'), join(here, '../dist/web')].find((d) => existsSync(join(d, 'index.html')));

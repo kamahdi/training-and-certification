@@ -78,7 +78,8 @@ export async function staffRoutes(app: FastifyInstance, deps: Deps) {
     if (!canUseQueue(req.staff!, professionalId)) return reply.code(403).send({ error: 'forbidden' });
     try {
       const day = await today();
-      return await withTx((c) => call(c, { professionalId, day, version: Number(version), visitId, actor: `staff:${req.staff!.id}` }), db);
+      const res = await withTx((c) => call(c, { professionalId, day, version: Number(version), visitId, actor: `staff:${req.staff!.id}` }), db);
+      return { ...res, calledTime: localTime(clock.now(), (await getClinic(db)).time_zone) };
     } catch (e) {
       if (e instanceof ConflictError) return reply.code(409).send(await conflictBody(professionalId, e.reason));
       throw e;
@@ -114,7 +115,8 @@ export async function staffRoutes(app: FastifyInstance, deps: Deps) {
     const v = await getVisit(db, req.params.id);
     if (!v) return reply.code(404).send({ error: 'not_found' });
     const answers = await withTx((c) => answersForStaff(c, v, req.staff!), db);
-    return { name: v.patient_name, answers };
+    const tz = (await getClinic(db)).time_zone;
+    return { name: v.patient_name, answers: answers && { ...answers, updatedTime: localTime(new Date(answers.updatedAt), tz) } };
   });
 
   // ------------------------------------------------------ reception

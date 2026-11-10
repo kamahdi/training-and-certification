@@ -74,6 +74,7 @@ function describe(v: VisitRow, clinic: ClinicSettings) {
   const opens = checkinOpensAt(v, clinic);
   return {
     visitId: v.id,
+    token: linkToken(v.id, 'visit'), // this phone opened the link already; lets it return to the visit page
     firstName: firstName(v.patient_name),
     time: v.starts_at ? localTime(v.starts_at, clinic.time_zone) : null,
     professional: v.professional_name,

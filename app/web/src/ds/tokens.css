@@ -1,0 +1,166 @@
+/* ETHIX Design System — generated from tokens.json */
+:root, [data-theme="light"] {
+  --ethix-rich-black: #0a0a0a;
+  --ethix-emerald: #008a5c;
+  --ethix-deep-green: #006b44;
+  --ethix-soft-green: #e6f4ee;
+  --ethix-light-grey: #f5f7f6;
+  --ethix-slate-grey: #6b7370;
+  --n-0: #ffffff;
+  --n-25: #fafbfa;
+  --n-50: var(--ethix-light-grey);
+  --n-100: #ecefed;
+  --n-200: #dde1df;
+  --n-300: #c3c9c6;
+  --n-400: #9ba3a0;
+  --n-500: var(--ethix-slate-grey);
+  --n-600: #525855;
+  --n-700: #383c3a;
+  --n-800: #1f2221;
+  --n-900: var(--ethix-rich-black);
+  --g-50: var(--ethix-soft-green);
+  --g-100: #c9e7da;
+  --g-200: #9ad3bc;
+  --g-300: #5fbb99;
+  --g-400: #22a075;
+  --g-500: var(--ethix-emerald);
+  --g-600: var(--ethix-deep-green);
+  --g-700: #005434;
+  --g-800: #003d26;
+  --g-900: #00291a;
+  --text-strong: var(--ethix-rich-black);
+  --text-body: var(--n-700);
+  --text-muted: var(--ethix-slate-grey);
+  --text-subtle: var(--n-400);
+  --text-accent: var(--ethix-emerald);
+  --text-accent-deep: var(--ethix-deep-green);
+  --text-on-dark: var(--n-0);
+  --text-on-dark-muted: #a8b0ad;
+  --text-on-accent: var(--n-0);
+  --text-link: var(--ethix-deep-green);
+  --text-link-hover: var(--ethix-emerald);
+  --surface-page: var(--n-0);
+  --surface-subtle: var(--ethix-light-grey);
+  --surface-card: var(--n-0);
+  --surface-card-tint: var(--ethix-soft-green);
+  --surface-inverse: var(--ethix-rich-black);
+  --surface-inverse-raised: #141716;
+  --surface-accent: var(--ethix-emerald);
+  --surface-accent-deep: var(--ethix-deep-green);
+  --surface-overlay: rgba(10,10,10,.64);
+  --border-hairline: var(--n-200);
+  --border-strong: var(--n-300);
+  --border-accent: var(--ethix-emerald);
+  --border-on-dark: rgba(255,255,255,.14);
+  --border-focus: var(--ethix-emerald);
+  --status-positive: var(--ethix-emerald);
+  --status-positive-surface: var(--ethix-soft-green);
+  --status-warning: #b4791c;
+  --status-warning-surface: #fbf1df;
+  --status-critical: #b03a2b;
+  --status-critical-surface: #fbeae7;
+  --status-info: var(--ethix-slate-grey);
+  --status-info-surface: var(--ethix-light-grey);
+  --shadow-none: none;
+  --shadow-xs: 0 1px 2px rgba(10,10,10,.05);
+  --shadow-sm: 0 1px 3px rgba(10,10,10,.06), 0 1px 2px rgba(10,10,10,.04);
+  --shadow-md: 0 4px 14px rgba(10,10,10,.07);
+  --shadow-lg: 0 12px 32px rgba(10,10,10,.10);
+  --shadow-xl: 0 24px 60px rgba(10,10,10,.14);
+  --shadow-accent: 0 8px 24px rgba(0,138,92,.22);
+  --ring-focus: 0 0 0 3px rgba(0,138,92,.28);
+  --ring-focus-on-dark: 0 0 0 3px rgba(0,138,92,.45);
+}
+:root {
+  --space-0: 0px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+  --gutter-inline: 24px;
+  --gutter-inline-lg: 64px;
+  --section-y: 96px;
+  --section-y-sm: 56px;
+  --card-pad: 24px;
+  --card-pad-lg: 32px;
+  --control-pad-x: 20px;
+  --control-gap: 8px;
+  --stack-gap: 16px;
+  --radius-0: 0px;
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --radius-pill: 999px;
+  --radius-control: 8px;
+  --radius-card: 14px;
+  --radius-card-lg: 20px;
+  --radius-sheet: 24px;
+  --radius-badge: 999px;
+  --radius-input: 8px;
+  --control-h-sm: 34px;
+  --control-h: 44px;
+  --control-h-lg: 54px;
+  --icon-sm: 16px;
+  --icon-md: 20px;
+  --icon-lg: 24px;
+  --icon-xl: 32px;
+  --max-content: 1200px;
+  --max-prose: 660px;
+  --type-hero: clamp(44px,6.2vw,88px);
+  --type-display-1: 64px;
+  --type-display-2: 52px;
+  --type-display-3: 40px;
+  --type-title-1: 32px;
+  --type-title-2: 26px;
+  --type-title-3: 21px;
+  --type-body-lg: 18px;
+  --type-body: 16px;
+  --type-body-sm: 14px;
+  --type-caption: 13px;
+  --type-micro: 11px;
+  --fw-light: 300;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --lh-tight: 1.02;
+  --lh-display: 1.08;
+  --lh-heading: 1.2;
+  --lh-body: 1.55;
+  --lh-relaxed: 1.7;
+  --ls-hero: -0.03em;
+  --ls-display: -0.02em;
+  --ls-heading: -0.01em;
+  --ls-body: 0em;
+  --ls-eyebrow: 0.14em;
+  --ls-micro: 0.08em;
+  --font-display: "Satoshi", "Inter", system-ui, -apple-system, sans-serif;
+  --font-text: "Inter", "Satoshi", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+.hero { font-family: var(--font-display); font-size: 88px; line-height: 1.02; font-weight: 700; letter-spacing: -0.03em; }
+.display-1 { font-family: var(--font-display); font-size: 64px; line-height: 1.08; font-weight: 700; letter-spacing: -0.02em; }
+.display-2 { font-family: var(--font-display); font-size: 52px; line-height: 1.08; font-weight: 700; letter-spacing: -0.02em; }
+.display-3 { font-family: var(--font-display); font-size: 40px; line-height: 1.08; font-weight: 700; letter-spacing: -0.02em; }
+.title-1 { font-family: var(--font-display); font-size: 32px; line-height: 1.2; font-weight: 700; letter-spacing: -0.01em; }
+.title-2 { font-family: var(--font-display); font-size: 26px; line-height: 1.2; font-weight: 700; letter-spacing: -0.01em; }
+.title-3 { font-family: var(--font-display); font-size: 21px; line-height: 1.3; font-weight: 600; }
+.body-lg { font-family: var(--font-text); font-size: 18px; line-height: 1.55; font-weight: 400; }
+.body { font-family: var(--font-text); font-size: 16px; line-height: 1.55; font-weight: 400; }
+.body-sm { font-family: var(--font-text); font-size: 14px; line-height: 1.55; font-weight: 400; }
+.caption { font-family: var(--font-text); font-size: 13px; line-height: 1.5; font-weight: 400; }
+.eyebrow { font-family: var(--font-text); font-size: 12px; font-weight: 600; letter-spacing: 0.14em; }
+.micro { font-family: var(--font-text); font-size: 11px; font-weight: 500; letter-spacing: 0.08em; }
+.figure { font-family: var(--font-mono); font-size: 13px; font-weight: 400; }

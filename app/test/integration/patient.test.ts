@@ -104,6 +104,22 @@ describe('Epic 2 · pre-visit form', () => {
     await expect(db.pool.query('DELETE FROM access_log')).rejects.toThrow(/append-only/);
     await expect(db.pool.query("UPDATE access_log SET staff_role = 'x'")).rejects.toThrow(/append-only/);
   });
+
+  it('WR-06: a form changed after check-in shows "updated" with the time of the change', async () => {
+    const clock = useClock('2026-11-11T16:30:00Z');
+    await runDueJobs(db.pool);
+    const id = await visitIdByName(db, 'Sara Bauwens');
+    await h.app.inject({ method: 'POST', url: `/api/form/${formToken(id)}`, payload: { reason: 'Knee pain', consent: true } });
+    clock.set('2026-11-12T12:50:00Z'); // 13:50 Brussels
+    const reception = await h.login('reception@test');
+    await h.app.inject({ method: 'POST', url: `/api/reception/visits/${id}/arrived`, headers: { cookie: reception } });
+    const before = (await h.app.inject({ url: `/api/visits/${id}/answers`, headers: { cookie: reception } })).json();
+    expect(before.answers.updatedAfterCheckIn).toBe(false);
+    clock.set('2026-11-12T12:55:00Z'); // 13:55 Brussels
+    await h.app.inject({ method: 'POST', url: `/api/form/${formToken(id)}`, payload: { reason: 'Knee pain, now swollen', consent: true } });
+    const after = (await h.app.inject({ url: `/api/visits/${id}/answers`, headers: { cookie: reception } })).json();
+    expect(after.answers).toMatchObject({ reason: 'Knee pain, now swollen', updatedAfterCheckIn: true, updatedTime: '13:55' });
+  });
 });
 
 describe('Epic 3 · check-in', () => {

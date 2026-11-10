@@ -15,3 +15,51 @@ Product documents for the clinic waiting-room service, in the [BMAD Method](http
 | BMAD configuration | [.bmad-core/core-config.yaml](.bmad-core/core-config.yaml) |
 
 The BMAD agents themselves are not committed; install them with `npx bmad-method install`.
+
+## The app (phase 1)
+
+The phase 1 app is in [app/](app/): a Fastify server, a worker for texts and timed jobs, and a React web app, all on one Postgres database. It covers every P0 story (epics 1–7). Each story file in [docs/stories/](docs/stories/) lists its tests and files in its Dev Agent Record.
+
+### Run it locally
+
+You need Node 22 or later and Postgres 16. Copy `app/.env.example` to `app/.env` and point `DATABASE_URL` at an empty database. The development keys are used when `FIELD_ENCRYPTION_KEY` and `LINK_SECRET` are empty; production refuses to start without them.
+
+```bash
+cd app && npm install
+```
+
+```bash
+npm run migrate && npm run seed -- --demo
+```
+
+```bash
+npm run dev
+```
+
+Open http://localhost:5173. Patients start at `/c` (the entrance QR code) or at the visit link in their text. Staff sign in at `/staff`: `peeters@demo.clinic`, `janssens@demo.clinic`, `reception@demo.clinic` or `manager@demo.clinic`, all with the password `demo-password`. In development no real texts go out: the fake provider keeps them, and `GET /api/dev/outbox` lists them.
+
+For a production-style run, build once and start the server and the worker as separate processes:
+
+```bash
+npm run build && npm start
+```
+
+```bash
+npm run start:worker
+```
+
+### Checks
+
+| Command | What it does |
+| --- | --- |
+| `npm run typecheck` | TypeScript check of server, shared code, web and tests |
+| `npm run lint` | Fails on direct use of the system clock (all time goes through `server/clock.ts`) |
+| `npm test` | Unit, integration and component tests (integration tests create their own databases; set `TEST_ADMIN_DATABASE_URL` to a connection that can create databases) |
+| `npm run coverage` | Lists each story's acceptance criteria and the tests tagged with its WR id |
+| `npm run test:e2e` | Browser journey (import, check-in by text code, call, patient page); needs a running, seeded server at `BASE_URL` |
+
+### Not in phase 1 yet
+
+- A real text-message provider: the provider is still an open decision, so only the fake is wired.
+- French and Dutch texts and pages (story 8.4, P1).
+- The reception screen refreshes every 10 seconds instead of using the live stream.
