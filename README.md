@@ -50,6 +50,14 @@ npm run build && npm start
 
 You need Docker with Compose (Docker Desktop, or Docker Engine in WSL or Linux). This runs two containers: `app` (the whole application: API, web pages and worker) and `db` (Postgres). In production only the `app` container is deployed, next to a managed EU Postgres; to scale, run more copies of it.
 
+The quickest way is one script that checks Docker, creates the secrets, builds, starts, loads the demo data and prints the address. It is safe to run again:
+
+```bash
+bash app/scripts/run-local.sh
+```
+
+Or step by step:
+
 1. Create `app/.env` with the two secrets the production image requires:
 
 ```bash
