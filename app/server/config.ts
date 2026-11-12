@@ -48,6 +48,15 @@ export const config = {
     if (process.env.VITEST || !this.outboxEnabled) return null;
     return process.env.DEV_OUTBOX_FILE ?? join(tmpdir(), 'clinic-waiting-room-outbox.jsonl');
   },
+  /**
+   * ADR-006: what this process runs. "all" (default): the web server and the worker in one process,
+   * so one container is the whole app. "web" or "worker": only that part, to split them later.
+   */
+  get role(): 'all' | 'web' | 'worker' {
+    const r = env('ROLE', 'all');
+    if (r !== 'all' && r !== 'web' && r !== 'worker') throw new Error(`ROLE must be all, web or worker, not "${r}"`);
+    return r;
+  },
   get isProduction() {
     return isProduction();
   },

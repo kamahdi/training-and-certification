@@ -8,9 +8,8 @@
     "node": ">=22"
   },
   "scripts": {
-    "dev": "concurrently -k -n server,worker,web \"npm:dev:server\" \"npm:dev:worker\" \"npm:dev:web\"",
-    "dev:server": "tsx watch server/index.ts",
-    "dev:worker": "tsx watch server/worker/index.ts",
+    "dev": "concurrently -k -n app,web \"npm:dev:app\" \"npm:dev:web\"",
+    "dev:app": "tsx watch server/index.ts",
     "dev:web": "vite",
     "build": "vite build && tsc -p tsconfig.server.json && node scripts/copy-assets.mjs",
     "start": "node dist/server/server/index.js",

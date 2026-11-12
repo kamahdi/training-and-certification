@@ -20,7 +20,10 @@ server/
     snapshots.ts          queue and estimate snapshots
   routes/
     stream.ts             the two stream endpoints
-  worker/                 reminders, delay checks, retention, daily summary
+  db/
+    lock.ts               advisory locks: timed tasks run in one container at a time (ADR-006)
+  worker/                 reminders, delay checks, retention, daily summary; started by index.ts
+  index.ts                entry point: web server and worker in one process (ROLE=all|web|worker)
   clock.ts                the only place that reads the time
 web/
   hooks/useLiveStream.ts  EventSource hook with polling fallback
@@ -28,4 +31,6 @@ web/
   staff/                  reception and professional screens
 test/
   fixtures/demo-appointments.csv   synthetic data only
+Dockerfile                one image for the whole app (ADR-006)
+compose.yaml              local run: the app container and Postgres
 ```

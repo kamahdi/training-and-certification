@@ -1,6 +1,6 @@
 # Clinic Waiting Room Architecture Document
 
-One web application with a Postgres database, hosted in the EU, serves both the patients' visit pages and the staff screens. Every check-in and call is written as an event; queue order, estimates and texts are all computed from those events. The scale is small (one clinic), so the design favors simple, cheap and easy to audit over anything distributed.
+One web application with a Postgres database, hosted in the EU, serves both the patients' visit pages and the staff screens. It ships as one container image and runs as one container next to the database (ADR-006). Every check-in and call is written as an event; queue order, estimates and texts are all computed from those events. The scale is small (one clinic), so the design favors simple, cheap and easy to audit over anything distributed.
 
 ## At a glance
 
@@ -9,9 +9,11 @@ flowchart LR
   phone["Patient's phone<br/>visit page, QR check-in, form"] <-->|HTTPS + live updates| app
   pc["Clinic PC<br/>reception and professional screens, CSV upload"] <-->|HTTPS + live updates| app
   subgraph eu["EU hosting, one region"]
-    app["Web application<br/>Appointments · Check-in · Queue and calling<br/>Estimates · Messaging · Privacy · Event log"]
-    worker["Job worker<br/>reminders, delay checks, deletion"]
-    db[("Postgres<br/>data, event log, job queue")]
+    subgraph container["App container (one image, ADR-006)"]
+      app["Web application and web pages<br/>Appointments · Check-in · Queue and calling<br/>Estimates · Messaging · Privacy · Event log"]
+      worker["Job worker, same process<br/>texts, reminders, delay checks, deletion"]
+    end
+    db[("Postgres, managed<br/>data, event log, job queue")]
     app <--> db
     worker <--> db
   end
@@ -20,7 +22,7 @@ flowchart LR
   agenda["Online agenda API<br/>(phase 3, WR-29)"] -.-> app
 ```
 
-Browsers talk only to the web application, which also keeps their screens updated live. The job worker shares the same database and sends the texts; the provider reports delivery back to the application.
+Browsers talk only to the web application, which also keeps their screens updated live. The job worker runs in the same process and container, shares the same database and sends the texts; the provider reports delivery back to the application. To deploy, run the one app container against a managed Postgres; to scale, run more copies of it.
 
 ## Assumptions and constraints
 
@@ -39,7 +41,7 @@ Not stated anywhere, so assumed here (please correct):
 
 ## Components
 
-One deployable application split into modules with clear boundaries, plus a background worker from the same codebase.
+One deployable application split into modules with clear boundaries. The background worker is part of the same process, so one container runs the whole application (ADR-006).
 
 | Component | What it owns | Backlog stories |
 | --- | --- | --- |
@@ -52,7 +54,7 @@ One deployable application split into modules with clear boundaries, plus a back
 | Messaging module | Text templates in French, Dutch and English, sending, delivery reports | WR-03, WR-04, WR-19, WR-23, WR-24, WR-26 |
 | Privacy module | Encrypted form answers, access log, retention deletion | WR-21, WR-22, WR-31, WR-32 |
 | Event log | Append-only record of every step | WR-20 |
-| Background worker | Reminders, delay checks, retention deletion, daily summary | WR-04, WR-19, WR-21, WR-25 |
+| Background worker | Reminders, delay checks, retention deletion, daily summary. Runs inside the app process; timed tasks run in one container at a time | WR-04, WR-19, WR-21, WR-25 |
 | Postgres (EU) | All data, plus the job queue | All |
 | Text-message provider (external) | Sending texts and reporting delivery | WR-03, WR-04, WR-08, WR-19 |
 | Online agenda (external, P2) | Source of appointments once integrated | WR-29 |
@@ -120,7 +122,7 @@ The event log is the source of truth for what happened. Visit status is kept alo
 
 **Context.** One clinic, under 500 appointments a day, a small team. Staff and patient screens need live updates, form answers need an audit trail, and the agenda integration comes later.
 
-**Decision.** Build one application with internal modules and one Postgres database. The background worker runs from the same codebase.
+**Decision.** Build one application with internal modules and one Postgres database. The background worker runs from the same codebase, and since ADR-006 in the same process and container.
 
 | Option | Complexity | Running cost | Fit for this product |
 | --- | --- | --- | --- |
@@ -152,7 +154,7 @@ The event log is the source of truth for what happened. Visit status is kept alo
 
 - Easier: updates arrive in about a second, without extra infrastructure.
 - Harder: the host must allow long-lived connections; check its idle timeouts before choosing it.
-- Revisit: at several app servers, notifications already fan out through Postgres, so nothing changes until much larger scale.
+- Revisit: at several app servers, notifications already fan out through Postgres, so nothing changes until much larger scale. Checked on Nov 12, 2026 with two app containers: a call made through one reached a staff screen connected to the other in about a second.
 
 #### Solution design: live updates
 
@@ -331,12 +333,55 @@ This design is done when the freshness criteria in WR-12 (5 seconds) and WR-17 (
 - Harder: every write must emit its event. One shared function writes both, and tests check that no path skips it.
 - Revisit: the retention job must make events anonymous without breaking the statistics.
 
+### ADR-006 · One app container, plus the database
+
+**Status:** Accepted · **Date:** Nov 12, 2026 · **Deciders:** @KAMEL (product owner and tech lead)
+
+**Context.** The application should run in as few containers as possible, to keep deployment simple and to make scaling a matter of adding copies rather than redesigning. The first container setup had three: Postgres, the web server and a separate worker, built from one image but deployed, configured and monitored as two services. The scale is still one clinic, under 500 appointments a day, run by one developer with Claude Code agents.
+
+**Decision.** Ship one image and run it as one container that holds the whole application: the API, the web pages and the background worker, in one process. Postgres is the only other piece: a managed EU database in production, so only the app container is deployed; a second container for local runs and demos. To scale, run more copies of the same container behind a load balancer. A `ROLE` setting (`all` by default, or `web`, `worker`) can still split the worker out later without a code change.
+
+| Option | Containers to deploy | Complexity | Scaling later | Fit for this product |
+| --- | --- | --- | --- | --- |
+| **A. One app container + Postgres (chosen)** | 1 in production (managed database), 2 locally | Low | Add copies of the same container; jobs and live updates already coordinate through Postgres | One thing to build, configure, deploy and watch; matches ADR-001 |
+| B. Web and worker containers + Postgres (previous) | 2 in production, 3 locally | Medium | Scale web and worker separately | Separate scaling is not needed at one clinic; two services to keep in step for no gain |
+| C. App and Postgres in one container | 1 | Low at first | Cannot add app copies without copying the database; backups and upgrades tied to app releases | Fewest containers, but gives up managed backups and point-in-time recovery, which the 5-minute data-loss target needs |
+| D. Serverless functions + managed database | 0 (platform-run) | Medium | Automatic | Long-lived live-update connections and a polling worker fit poorly; splits code across platform services (as in ADR-001, option C) |
+
+**How several copies stay correct.**
+
+| Concern | What happens with several app containers |
+| --- | --- |
+| Background jobs (texts) | Every copy claims due jobs with `FOR UPDATE SKIP LOCKED`, so each job runs once; dedupe keys stop a second text for the same reason (ADR-003) |
+| Timed tasks (estimates, delay check, retention) | Each runs only in the copy that wins its Postgres advisory lock (`server/db/lock.ts`); the others skip that tick |
+| Migrations | Every copy migrates at start, behind an advisory lock, so they apply once |
+| Live updates | Each copy listens to Postgres notifications, so a change made through one reaches screens connected to any other (ADR-002) |
+| Staff sessions | Stored in Postgres, so any copy accepts a sign-in made on another; the load balancer needs no sticky sessions |
+| Rate limits on check-in and sign-in | Counted in memory, per copy: with N copies the limit is N times looser. Move the counts to Postgres before running a second copy in production |
+
+**Consequences.**
+
+- Easier: one image and one container to deploy, configure, secure and monitor; local runs use two containers (app and database) and development two processes (app and web dev server).
+- Easier: scaling is adding copies of the same container, with no change to the code or the data model.
+- Harder: the worker shares the web server's CPU and memory, so a slow task (a large import, the daily deletion) can slow requests on that copy. At one clinic this is far below what one container handles.
+- Harder: the app container now does background work even when no request comes in, so the host must keep it running (no scale-to-zero).
+- Revisit: split `ROLE=worker` into its own container only if background work measurably slows requests, or if texts grow to thousands a minute.
+
+**Action items.**
+
+1. [x] Run the worker inside the app process (`ROLE=all`, the default); keep `ROLE=web` and `ROLE=worker`.
+2. [x] Run timed tasks under a Postgres advisory lock; take one for migrations too.
+3. [x] Compose file with two services, `app` and `db`; the image has a health check on `/api/health`.
+4. [x] Check two app containers against one database: shared sign-in, live updates and timed tasks.
+5. [ ] Move the check-in and sign-in rate limits to Postgres before running more than one copy in production.
+6. [ ] When choosing the host, check that it runs one always-on container with long-lived HTTP connections, next to a managed EU Postgres.
+
 ## Open decisions and action items
 
 | Open decision | What it must meet | Who decides |
 | --- | --- | --- |
 | Stack | Decided: TypeScript, React, Postgres | Tech lead |
-| Hosting provider | EU region; managed Postgres with point-in-time recovery; long-lived HTTP connections; data processing agreement | Tech lead, legal |
+| Hosting provider | EU region; runs one always-on container (ADR-006); managed Postgres with point-in-time recovery; long-lived HTTP connections; data processing agreement | Tech lead, legal |
 | Text-message provider | Belgian numbers; clinic name as sender; delivery reports by webhook; EU processing; price per text | Tech lead |
 | Retention period | Belgian rules for this kind of data | Legal |
 | Online agenda product | Has an API with appointment changes and cancellations | Clinic |
@@ -344,10 +389,11 @@ This design is done when the freshness criteria in WR-12 (5 seconds) and WR-17 (
 **Action items**
 
 - [x] Tech lead named: Kamel, also the product owner. The stack is confirmed: TypeScript, React, Postgres.
-- [ ] Review ADR-001 to ADR-005, then mark each Accepted or amend it.
+- [ ] Review ADR-001 to ADR-005, then mark each Accepted or amend it. ADR-006 is accepted.
+- [ ] Move rate limits to Postgres before a second app container runs in production (ADR-006).
 - [x] Add a backlog story to export one patient's data on request (GDPR right of access). Erasure is covered by WR-31.
 - [ ] Shortlist two EU hosts and two text providers against the criteria above, then sign their processing agreements.
-- [ ] Build a working end-to-end slice with the demo file: import, visit page, QR check-in, "Next patient", estimate update. It tests ADR-001, ADR-002 and ADR-005 before the rest of the backlog.
+- [x] Build a working end-to-end slice with the demo file: import, visit page, QR check-in, "Next patient", estimate update. It tests ADR-001, ADR-002 and ADR-005 before the rest of the backlog. Done: `app/e2e/journey.mjs` passes in development and in containers.
 - [ ] Complete the data protection impact assessment before any real patient data is used.
 
 
@@ -356,3 +402,4 @@ This design is done when the freshness criteria in WR-12 (5 seconds) and WR-17 (
 | Date | Version | Description | Author |
 | --- | --- | --- | --- |
 | 2026-11-10 | 1.0 | First version, from the Claude Docs architecture tab (https://claude.ai/artifact/NeM4fi6P1N9jRVjSGXNKoa) | Kamel |
+| 2026-11-12 | 1.1 | ADR-006: one app container plus the database; worker in the app process; diagram, components and open items updated | Kamel |

@@ -18,7 +18,7 @@ The BMAD agents themselves are not committed; install them with `npx bmad-method
 
 ## The app (phase 1)
 
-The phase 1 app is in [app/](app/): a Fastify server, a worker for texts and timed jobs, and a React web app, all on one Postgres database. It covers every P0 story (epics 1–7). Each story file in [docs/stories/](docs/stories/) lists its tests and files in its Dev Agent Record.
+The phase 1 app is in [app/](app/): one Node.js application (API, React web pages, and the worker for texts and timed jobs, in one process) on one Postgres database. It ships as one container (see [ADR-006](docs/architecture.md#adr-006--one-app-container-plus-the-database)). It covers every P0 story (epics 1–7). Each story file in [docs/stories/](docs/stories/) lists its tests and files in its Dev Agent Record.
 
 ### Run it locally
 
@@ -36,21 +36,19 @@ npm run migrate && npm run seed -- --demo
 npm run dev
 ```
 
-Open http://localhost:5173. In a cloud container or to test from a phone, start it with `DEV_HOST=0.0.0.0 npm run dev` so the web dev server accepts connections from outside the machine; by default it listens on localhost only. Patients start at `/c` (the entrance QR code) or at the visit link in their text. Staff sign in at `/staff`: `peeters@demo.clinic`, `janssens@demo.clinic`, `reception@demo.clinic` or `manager@demo.clinic`, all with the password `demo-password`. In development no real texts go out: the fake provider keeps them, and `GET /api/dev/outbox` lists the last 50, whether the server or the worker sent them.
+Open http://localhost:5173. In a cloud container or to test from a phone, start it with `DEV_HOST=0.0.0.0 npm run dev` so the web dev server accepts connections from outside the machine; by default it listens on localhost only. Patients start at `/c` (the entrance QR code) or at the visit link in their text. Staff sign in at `/staff`: `peeters@demo.clinic`, `janssens@demo.clinic`, `reception@demo.clinic` or `manager@demo.clinic`, all with the password `demo-password`. In development no real texts go out: the fake provider keeps them, and `GET /api/dev/outbox` lists the last 50.
 
-For a production-style run, build once and start the server and the worker as separate processes:
+For a production-style run, build once and start the app; it runs the web server and the worker in one process:
 
 ```bash
 npm run build && npm start
 ```
 
-```bash
-npm run start:worker
-```
+`ROLE=web` or `ROLE=worker` runs only one of the two, should they ever need separate containers.
 
 ### Run it with Docker
 
-You need Docker with Compose (Docker Desktop, or Docker Engine in WSL or Linux). This runs Postgres, the server (which also serves the web app) and the worker, each in its own container.
+You need Docker with Compose (Docker Desktop, or Docker Engine in WSL or Linux). This runs two containers: `app` (the whole application: API, web pages and worker) and `db` (Postgres). In production only the `app` container is deployed, next to a managed EU Postgres; to scale, run more copies of it.
 
 1. Create `app/.env` with the two secrets the production image requires:
 
@@ -67,7 +65,7 @@ docker compose up -d --build
 3. Load the demo staff and today's demo appointments (once):
 
 ```bash
-docker compose run --rm server node dist/server/server/seed.js --demo
+docker compose run --rm app node dist/server/server/seed.js --demo
 ```
 
 4. Open http://localhost:3000/staff and sign in with one of the demo accounts above.
