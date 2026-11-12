@@ -36,7 +36,7 @@ npm run migrate && npm run seed -- --demo
 npm run dev
 ```
 
-Open http://localhost:5173. Patients start at `/c` (the entrance QR code) or at the visit link in their text. Staff sign in at `/staff`: `peeters@demo.clinic`, `janssens@demo.clinic`, `reception@demo.clinic` or `manager@demo.clinic`, all with the password `demo-password`. In development no real texts go out: the fake provider keeps them, and `GET /api/dev/outbox` lists them.
+Open http://localhost:5173. Patients start at `/c` (the entrance QR code) or at the visit link in their text. Staff sign in at `/staff`: `peeters@demo.clinic`, `janssens@demo.clinic`, `reception@demo.clinic` or `manager@demo.clinic`, all with the password `demo-password`. In development no real texts go out: the fake provider keeps them, and `GET /api/dev/outbox` lists the last 50, whether the server or the worker sent them.
 
 For a production-style run, build once and start the server and the worker as separate processes:
 

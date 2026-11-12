@@ -1,3 +1,6 @@
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+
 function env(name: string, fallback?: string): string {
   const v = process.env[name] ?? fallback;
   if (v === undefined) throw new Error(`Missing environment variable ${name}`);
@@ -29,6 +32,14 @@ export const config = {
   },
   get smsProvider() {
     return env('SMS_PROVIDER', 'fake');
+  },
+  /**
+   * Development only: file where the fake text provider also writes what it sends, so the server's
+   * /api/dev/outbox shows texts sent by the worker too. Null in production and in tests.
+   */
+  get devOutboxFile(): string | null {
+    if (isProduction() || process.env.VITEST || this.smsProvider !== 'fake') return null;
+    return process.env.DEV_OUTBOX_FILE ?? join(tmpdir(), 'clinic-waiting-room-outbox.jsonl');
   },
   /** 32-byte key for field encryption of form answers. */
   get fieldKey(): Buffer {

@@ -112,6 +112,6 @@ export async function patientRoutes(app: FastifyInstance, deps: Deps) {
 
   app.get('/api/clinic', async () => {
     const clinic = await getClinic(db);
-    return { name: clinic.name, address: clinic.address, today: localDate(clock.now(), clinic.time_zone) };
+    return { name: clinic.name, address: clinic.address, today: localDate(clock.now(), clinic.time_zone), timeZone: clinic.time_zone };
   });
 }

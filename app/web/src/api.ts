@@ -1,3 +1,15 @@
+import { localTime } from '../../shared/time';
+
+/** Times on staff and patient screens are clinic time, never the browser's own time zone. */
+let clinicTimeZone = 'Europe/Brussels'; // the default until /api/clinic answers with the clinic's setting
+export function loadClinicTimeZone() {
+  return api<{ timeZone?: string }>('/api/clinic').then((c) => { if (c.timeZone) clinicTimeZone = c.timeZone; }, () => {});
+}
+/** 'H:MM' in clinic time, e.g. '12:47'. */
+export function clinicTime(d: Date): string {
+  return localTime(d, clinicTimeZone);
+}
+
 /** Small fetch wrapper: JSON in, JSON out, errors carry the server's message. */
 export class ApiError extends Error {
   constructor(public status: number, public body: any) {

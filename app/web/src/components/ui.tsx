@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { clinicTime } from '../api';
 
 export function Icon({ name, size = 20, color = 'currentColor' }: { name: 'check' | 'alert' | 'bell' | 'refresh' | 'clock' | 'more' | 'close' | 'lock' | 'people'; size?: number; color?: string }) {
   const p = { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke: color, strokeWidth: 2, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, 'aria-hidden': true };
@@ -135,7 +136,7 @@ export function LiveChip({ status, updatedAt }: { status: 'connecting' | 'live' 
   if (status === 'live') return <span className="live">Live</span>;
   return (
     <span className="live off" role="status">
-      {status === 'connecting' ? 'Connecting…' : `Reconnecting… ${updatedAt ? `last updated ${updatedAt.toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit' })}` : ''}`}
+      {status === 'connecting' ? 'Connecting…' : `Reconnecting… ${updatedAt ? `last updated ${clinicTime(updatedAt)}` : ''}`}
     </span>
   );
 }

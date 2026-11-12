@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { loadClinicTimeZone } from './api';
 import './styles.css';
 import { CheckInPage } from './patient/CheckInPage';
 import { FormPage } from './patient/FormPage';
@@ -10,7 +11,8 @@ import { QueuePage } from './staff/QueuePage';
 import { ReceptionPage } from './staff/ReceptionPage';
 import { StaffHome } from './staff/StaffShell';
 
-createRoot(document.getElementById('root')!).render(
+// Load the clinic's time zone first, so every time on screen is clinic time from the first render.
+loadClinicTimeZone().then(() => createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
@@ -25,4 +27,4 @@ createRoot(document.getElementById('root')!).render(
       </Routes>
     </BrowserRouter>
   </StrictMode>,
-);
+));

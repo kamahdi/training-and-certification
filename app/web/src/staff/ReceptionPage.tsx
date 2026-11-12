@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { clinicTime } from '../api';
 import { Dialog, Icon, MoreMenu, Notice, UndoToast } from '../components/ui';
 import { StaffShell, TopBar, useStaff } from './StaffShell';
 
@@ -64,7 +65,7 @@ function Reception() {
     ]);
     setAppts(a.appointments);
     setFailed(f.failed);
-    setUpdatedAt(new Date().toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit' }));
+    setUpdatedAt(clinicTime(new Date()));
   }, [call, q, filter]);
 
   useEffect(() => {
