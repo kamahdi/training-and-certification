@@ -48,6 +48,34 @@ npm run build && npm start
 npm run start:worker
 ```
 
+### Run it with Docker
+
+You need Docker with Compose (Docker Desktop, or Docker Engine in WSL or Linux). This runs Postgres, the server (which also serves the web app) and the worker, each in its own container.
+
+1. Create `app/.env` with the two secrets the production image requires:
+
+```bash
+cd app && printf 'FIELD_ENCRYPTION_KEY=%s\nLINK_SECRET=%s\n' "$(openssl rand -base64 32)" "$(openssl rand -hex 32)" > .env
+```
+
+2. Build and start everything:
+
+```bash
+docker compose up -d --build
+```
+
+3. Load the demo staff and today's demo appointments (once):
+
+```bash
+docker compose run --rm server node dist/server/server/seed.js --demo
+```
+
+4. Open http://localhost:3000/staff and sign in with one of the demo accounts above.
+
+No real texts are sent: the fake provider keeps them. To see the links and codes patients would receive, sign in as reception or the manager, then open http://localhost:3000/api/dev/outbox in the same browser. In the container this page needs that sign-in; set `DEMO_OUTBOX=off` in `app/.env` to turn it off. Set `APP_PORT` there to use another port than 3000.
+
+To stop: `docker compose down` (add `-v` to delete the database too).
+
 ### Checks
 
 | Command | What it does |

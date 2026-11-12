@@ -41,7 +41,7 @@ try {
   await phone.getByLabel('Phone number').fill('0470 11 22 03');
   await phone.getByRole('button', { name: 'Text me a code' }).click();
   await phone.getByText('Check-in · step 2 of 2').waitFor();
-  const outbox = await (await fetch(`${BASE}/api/dev/outbox`)).json();
+  const outbox = await (await reception.request.get(`${BASE}/api/dev/outbox`)).json(); // as reception: a container needs a sign-in
   const code = outbox.messages.reverse().find((m) => m.to === '+32470112203' && /code is/.test(m.body)).body.match(/(\d{4})/)[1];
   await phone.getByLabel('4-digit code').fill(code === '0000' ? '1111' : '0000');
   await phone.getByRole('button', { name: 'Check in' }).click();

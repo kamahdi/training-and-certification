@@ -12,7 +12,7 @@
     "dev:server": "tsx watch server/index.ts",
     "dev:worker": "tsx watch server/worker/index.ts",
     "dev:web": "vite",
-    "build": "vite build && tsc -p tsconfig.server.json",
+    "build": "vite build && tsc -p tsconfig.server.json && node scripts/copy-assets.mjs",
     "start": "node dist/server/server/index.js",
     "start:worker": "node dist/server/server/worker/index.js",
     "migrate": "tsx server/db/migrate.ts",

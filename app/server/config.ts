@@ -34,12 +34,22 @@ export const config = {
     return env('SMS_PROVIDER', 'fake');
   },
   /**
-   * Development only: file where the fake text provider also writes what it sends, so the server's
-   * /api/dev/outbox shows texts sent by the worker too. Null in production and in tests.
+   * Whether /api/dev/outbox shows what the fake text provider sent: always in development, and in
+   * production only for a demo (DEMO_OUTBOX=on), where it then needs a reception or manager sign-in.
+   */
+  get outboxEnabled(): boolean {
+    return this.smsProvider === 'fake' && (!isProduction() || process.env.DEMO_OUTBOX === 'on');
+  },
+  /**
+   * File where the fake text provider also writes what it sends, so the server's outbox shows texts
+   * sent by the worker too. Null in tests and whenever the outbox is off.
    */
   get devOutboxFile(): string | null {
-    if (isProduction() || process.env.VITEST || this.smsProvider !== 'fake') return null;
+    if (process.env.VITEST || !this.outboxEnabled) return null;
     return process.env.DEV_OUTBOX_FILE ?? join(tmpdir(), 'clinic-waiting-room-outbox.jsonl');
+  },
+  get isProduction() {
+    return isProduction();
   },
   /** 32-byte key for field encryption of form answers. */
   get fieldKey(): Buffer {

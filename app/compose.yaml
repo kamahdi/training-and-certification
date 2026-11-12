@@ -1,0 +1,61 @@
+# Clinic Waiting Room: Postgres, the API server (which also serves the web app) and the worker.
+#
+#   1. Put the two secrets in app/.env (see .env.example for how to generate them):
+#        FIELD_ENCRYPTION_KEY=...   LINK_SECRET=...
+#   2. docker compose up -d --build
+#   3. Demo staff and today's demo appointments (once):
+#        docker compose run --rm server node dist/server/server/seed.js --demo
+#   4. Open http://localhost:3000/staff
+#
+# Texts go to the fake provider: no real text is ever sent. With DEMO_OUTBOX=on (the default here),
+# reception or the manager can read them, links and codes included, at /api/dev/outbox after signing in.
+
+x-app: &app
+  build: .
+  image: clinic-waiting-room:local
+  restart: unless-stopped
+  depends_on:
+    db:
+      condition: service_healthy
+  environment:
+    DATABASE_URL: postgres://clinic:${POSTGRES_PASSWORD:-clinic}@db:5432/clinic
+    FIELD_ENCRYPTION_KEY: ${FIELD_ENCRYPTION_KEY:?set FIELD_ENCRYPTION_KEY in app/.env (32 bytes, base64)}
+    LINK_SECRET: ${LINK_SECRET:?set LINK_SECRET in app/.env}
+    PUBLIC_URL: ${PUBLIC_URL:-http://localhost:3000}
+    SMS_PROVIDER: fake
+    DEMO_OUTBOX: ${DEMO_OUTBOX:-on}
+    DEV_OUTBOX_FILE: /outbox/outbox.jsonl
+  volumes:
+    - outbox:/outbox
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: clinic
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-clinic}
+      POSTGRES_DB: clinic
+      TZ: Europe/Brussels
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U clinic -d clinic"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  server:
+    <<: *app
+    ports:
+      - "${APP_PORT:-3000}:3000"
+
+  worker:
+    <<: *app
+    command: ["node", "dist/server/server/worker/index.js"]
+    healthcheck:
+      disable: true
+
+volumes:
+  pgdata:
+  outbox:
